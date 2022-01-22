@@ -91,6 +91,7 @@ class Deck:
             found = True
             for set in decksets:
                 if set not in format.sets:
+                    print(set, format.sets) 
                     found=False
             if found:
                 return format.name

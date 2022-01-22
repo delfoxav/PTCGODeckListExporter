@@ -3,6 +3,7 @@ from card import Card
 
 
 from deck import Deck
+from deck import Jan2022_Format
 def parseTCGODecklist(filename):
     deck= Deck(name=filename)
     with open(filename, "r", encoding="utf-8") as tcgolist:
@@ -37,6 +38,8 @@ def parseTCGODecklist(filename):
                         collnum = getCollNum(line)
                         card = Card(amount = amount, name = line[first:last], type = "Energy", set = set, coll_num = collnum)
                         deck.add_card(card)
+    #retest the format as new cards have been added
+    deck.format =deck.setFormat(Jan2022_Format)
     return deck    
         
             
