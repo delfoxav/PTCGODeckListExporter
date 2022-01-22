@@ -51,6 +51,7 @@ class Card:
             "HIF",
             "CEC",
             "SSH",
+            "PR-SW",
             "RCL",
             "DAA",
             "CPA",

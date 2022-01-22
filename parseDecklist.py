@@ -5,7 +5,7 @@ from deck import Deck
 from deck import Jan2022_Format
 def parseTCGODecklist(filename):
     deck= Deck(name=filename)
-    with open(filename, "r", encoding="utf-8") as tcgolist:
+    with open( f"Import/{filename}", "r", encoding="utf-8") as tcgolist:
         while line :=tcgolist.readline():
             if line[:9] == "##Pokémon":
                 tcgolist.readline()
@@ -91,4 +91,4 @@ def remove_spaces(text):
     return(text.translate(translation))
 
 if __name__ == "__main__":
-    parseTCGODecklist("testlist.txt").exportToTCGO()
+    parseTCGODecklist("Import/turbo_dark.txt").exportToTCGO()
