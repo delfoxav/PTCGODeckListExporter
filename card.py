@@ -62,26 +62,40 @@ class Card:
             "FST",
             "BRS"]
     
-    basicEnergies =["Water Energy",
-                    "Grass Energy",
-                    "Lightning Energy",
-                    "Fire Energy",
-                    "Fighting Energy",
-                    "Dark Energy",
-                    "Psychic Energy",
-                    "Metal Energy",
-                    "Fairy Energy",
+    basicEnergies =["Darkness Energy Energy",
+                    "Fairy Energy Energy",
+                    "Fighting Energy Energy",
+                    "Fire Energy Energy",
+                    "Grass Energy Energy",
+                    "Lightning Energy Energy",
+                    "Metal Energy Energy",
+                    "Psychic Energy Energy",
+                    "Water Energy Energy",
                     ]
+    aceSpecs =["Computer Search",
+               "Crystal Edge",
+               "Crystal Wall",
+               "Dowsing Machine",
+               "G Booster",
+               "G Scope",
+               "Gold Potion",
+               "Life Dew",
+               "Master Ball",
+               "Rock Guard",
+               "Scoop Up Cyclone",
+               "Scramble Switch",
+               "Victory Piece"]
+               
     
     
     
-    def __init__(self, amount: int, name: str, type: str, set: str = None, coll_num: int = None, isAcespec = False, isPrism = False, isBasicNrj = False ) -> None:
+    def __init__(self, amount: int, name: str, type: str, set: str = None, coll_num: int = None, isAcespec = False, isPrism = False) -> None:
         """Create a new card"""
         self.amount = amount
         self.name = name
-        self.isAcespec = isAcespec
-        self.isPrism = isPrism
-        self.isBasicNrj = isBasicNrj
+        self.isAcespec = self.isAceSpec()
+        self.isPrism = self.isPrismStar()
+        self.isBasicNrj = self.isBasicNrj()
         if type in Card.types:
             self.type = type
         else:
@@ -101,14 +115,30 @@ class Card:
         else:
             return self.amount <= 4
     
+    def getSet(self) -> str:
+        """Return the set of the card"""
+        return self.set
+    
+    
     def __add__(self, other):
         """addition for cards, sum the amount of cards with the same name"""
         if self.name != other.name:
             raise CardDifferentNameError(f"I wasn't able to sum {self.name} and {other.name} please sum only cards with the same name.")
-        return Card(amount=self.amount+other.amount, name= self.name, type=self.type, set=self.set, isAcespec=self.isAcespec, isPrism=self.isPrism, isBasicNrj=self.isBasicNrj)
+        return Card(amount=self.amount+other.amount, name= self.name, type=self.type, set=self.set, isAcespec=self.isAcespec, isPrism=self.isPrism)
 
     def __iadd__(self, other):
         return self+other
+    
+    def isBasicNrj(self):
+        return self.name in Card.basicEnergies
+    
+    def isAceSpec(self):
+        return self.name in Card.aceSpecs
+    
+    def isPrismStar(self):
+        return "{*}" in self.name
+    
+    
 
 class CardTypeError(Exception):
     pass
@@ -118,4 +148,8 @@ class CardSetError(Exception):
 
 class CardDifferentNameError(Exception):
     pass
+
+
+
+pikachu = Card(4, "Pikachu {*}", "Pokemon", "BLW", 123)
 
