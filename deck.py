@@ -46,7 +46,7 @@ class Deck:
             if sumCard.isValid():
                 self.Energy.append(card)
             else:
-                raise DeckUnvalidCardError(f"There are too many of {sumCard.name} ({sumCard.amount})")
+                raise DeckUnvalidCardError(f"There are too many of {sumCard.name} ({sumCard.amount}) {sumCard.name[0]}")
             
     def add_cards(self, cards) -> None:
         """Add multiple cards to a deck"""
@@ -91,7 +91,6 @@ class Deck:
             found = True
             for set in decksets:
                 if set not in format.sets:
-                    print(set, format.sets) 
                     found=False
             if found:
                 return format.name
@@ -122,7 +121,10 @@ class Deck:
             deck.write(f"\n")
             deck.write(f"Energy ({self.getNumEnergy()})\n")
             for card in self.Energy:
-                deck.write(f"{card.amount} {card.name} {card.set} {card.coll_num} \n")
+                if card.set is not None:
+                    deck.write(f"{card.amount} {card.name} {card.set} {card.coll_num} \n")
+                else:
+                    deck.write(f"{card.amount} {card.name} {card.coll_num} \n")
 
 class DeckMoreThanOneAceSpecError(Exception):
     pass            

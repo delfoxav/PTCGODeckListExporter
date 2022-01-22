@@ -34,6 +34,7 @@ class Card:
             "STS",
             "EVO",
             "SUM",
+            "PR-SM",
             "GRI",
             "BUS",
             "SLG",
@@ -71,6 +72,16 @@ class Card:
                     "Metal Energy Energy",
                     "Psychic Energy Energy",
                     "Water Energy Energy",
+                    "Darkness Energy SMEnergy",
+                    "Fairy Energy SMEnergy",
+                    "Fighting Energy SMEnergy",
+                    "Fire Energy SMEnergy",
+                    "Grass Energy SMEnergy",
+                    "Lightning Energy SMEnergy",
+                    "Metal Energy SMEnergy",
+                    "Psychic Energy SMEnergy",
+                    "Water Energy SMEnergy",
+                    
                     ]
     aceSpecs =["Computer Search",
                "Crystal Edge",
@@ -100,7 +111,7 @@ class Card:
             self.type = type
         else:
             raise CardTypeError(f"I don't know the type {type}")
-        if set in Card.sets:
+        if set in Card.sets or set is None:
             self.set = set
         else:
             raise CardSetError(f"I don't know the set {set}")

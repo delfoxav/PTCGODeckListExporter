@@ -1,4 +1,3 @@
-from numpy import number
 from card import Card
 
 
@@ -15,7 +14,7 @@ def parseTCGODecklist(filename):
                     if line !="\n":
                         amount,first = getAmountCard(line)
                         set,last = getSet(line)
-                        collnum = getCollNum(line)
+                        collnum = getCollNum(line)[0]
                         card = Card(amount = amount, name = line[first:last], type = "Pokemon", set = set, coll_num = collnum)
                         deck.add_card(card)
             if line[:9] == "##Trainer":
@@ -25,7 +24,7 @@ def parseTCGODecklist(filename):
                     if line !="\n":
                         amount,first = getAmountCard(line)
                         set,last = getSet(line)
-                        collnum = getCollNum(line)
+                        collnum = getCollNum(line)[0]
                         card = Card(amount = amount, name = line[first:last], type = "Trainer", set = set, coll_num = collnum)
                         deck.add_card(card)
             if line[:8] == "##Energy":
@@ -35,17 +34,16 @@ def parseTCGODecklist(filename):
                     if line !="\n":
                         amount,first = getAmountCard(line)
                         set,last = getSet(line)
-                        collnum = getCollNum(line)
+                        if last is None:
+                            collnum,last = getCollNum(line)
+                        else:
+                            collnum = getCollNum(line)[0]
                         card = Card(amount = amount, name = line[first:last], type = "Energy", set = set, coll_num = collnum)
                         deck.add_card(card)
     #retest the format as new cards have been added
     deck.format =deck.setFormat(Jan2022_Format)
     return deck    
         
-            
-            
-            
-
 def getAmountCard(line):
     amount = []
     numbers = "0123456789"
@@ -68,16 +66,29 @@ def getCollNum(line):
         if line[i].lower() in letter:
             break
         
-    return int("".join(collNum))
+    return (int("".join(collNum)),i+1)
 
 def getSet(line):
     set = []
     for i in range(len(line)-1,0,-1):
-        if line[i].isupper() and line[i].isalpha():
+        if line[i].isupper() and line[i].isalpha() or line[i] =="-":
             set.insert(0,line[i])
         if line[i] == " " and line[i+1] in set:
             break
-    return ("".join(set),i+1)
+        #Handle basics Energies without set
+        if set == ["E"]:
+            return None,None
+    return ("".join(set),i)
+
+def remove_spaces(text):
+    """Return a copy of text without spaces and newline. Use String translate method
+    
+    param text: text to translate to a non space version
+    type text: str
+    """
+    #Uses the ascii code for white spaces here as " ","\n" and "\r\n" do not find anything
+    translation={32:"",13:"",10:"",9:""}
+    return(text.translate(translation))
 
 if __name__ == "__main__":
     parseTCGODecklist("testlist.txt").exportToTCGO()
