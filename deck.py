@@ -101,16 +101,18 @@ class Deck:
             
     def exportToTCGO(self) -> None:
         """Export a deck to a ptcgo readable format"""
+        if not self.isComplete():
+            return("This is not a valid deck")
         if not os.path.isdir("Export"):
             os.mkdir("Export")
         if not os.path.isdir(f"Export/{self.format}"):
             os.mkdir(f"Export/{self.format}")
-        if os.path.isfile(f"Export/{self.format}/{self.name}.txt"):
+        if os.path.isfile(f"Export/{self.format}/{self.name}"):
             answer=input("A deck with the same name already exist, do you want to overwrite it (y/n) ?")[0].lower()
             if answer != "y":
                 print("aborted")
                 return 0
-        with open(f"Export/{self.format}/{self.name}.txt","w") as deck:
+        with open(f"Export/{self.format}/{self.name}","w") as deck:
             deck.write(f"Pokemon ({self.getNumPokemon()})\n")
             for card in self.Pokemon:
                 deck.write(f"{card.amount} {card.name} {card.set} {card.coll_num} \n")
