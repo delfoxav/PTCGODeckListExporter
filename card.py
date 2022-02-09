@@ -64,26 +64,17 @@ class Card:
             "FST",
             "BRS"]
     
-    basicEnergies =["Darkness Energy Energy",
-                    "Fairy Energy Energy",
-                    "Fighting Energy Energy",
-                    "Fire Energy Energy",
-                    "Grass Energy Energy",
-                    "Lightning Energy Energy",
-                    "Metal Energy Energy",
-                    "Psychic Energy Energy",
-                    "Water Energy Energy",
-                    "Darkness Energy SMEnergy",
-                    "Fairy Energy SMEnergy",
-                    "Fighting Energy SMEnergy",
-                    "Fire Energy SMEnergy",
-                    "Grass Energy SMEnergy",
-                    "Lightning Energy SMEnergy",
-                    "Metal Energy SMEnergy",
-                    "Psychic Energy SMEnergy",
-                    "Water Energy SMEnergy",
-                    
+    basicEnergies =["Darkness Energy",
+                    "Fairy Energy",
+                    "Fighting Energy",
+                    "Fire Energy",
+                    "Grass Energy",
+                    "Lightning Energy",
+                    "Metal Energy",
+                    "Psychic Energy",
+                    "Water Energy",
                     ]
+
     aceSpecs =["Computer Search",
                "Crystal Edge",
                "Crystal Wall",
@@ -142,7 +133,10 @@ class Card:
         return self+other
     
     def isBasicNrj(self):
-        return self.name in Card.basicEnergies
+        for energy in Card.basicEnergies:
+            if self.name.startswith(energy):
+                return True
+        return False
     
     def isAceSpec(self):
         return self.name in Card.aceSpecs
