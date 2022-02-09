@@ -102,6 +102,8 @@ class Deck:
     def exportToTCGO(self) -> None:
         """Export a deck to a ptcgo readable format"""
         filepath = f"Export/{self.format}/{self.name}.txt"
+        if not self.isComplete():
+            return("This is not a valid deck")
         if not os.path.isdir("Export"):
             os.mkdir("Export")
         if not os.path.isdir(f"Export/{self.format}"):
