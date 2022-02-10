@@ -136,6 +136,9 @@ class DeckMoreThanOneAceSpecError(Exception):
 
 class DeckUnvalidCardError(Exception):
     pass
+
+class DeckIncompleteError(Exception):
+    pass
         
 if __name__ == "__main__":
     pikachu = Card(4, "Pikachu {*}", "Pokemon", "BLW", 123)

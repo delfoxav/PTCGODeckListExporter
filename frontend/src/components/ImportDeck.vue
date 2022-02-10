@@ -1,5 +1,6 @@
 <template>
   <div class="import">
+    <h2>Import deck</h2>
     <form @submit.prevent="submitForm">
       <div class="form-group m-3">
         <label>Deck Name</label>
@@ -23,7 +24,7 @@
         />
       </div>
       <div class="form-group m-3">
-        <button type="submit" class="btn btn-primary">Import a deck</button>
+        <button type="submit" class="btn btn-primary">Import</button>
       </div>
     </form>
   </div>
@@ -60,6 +61,7 @@ export default {
           }
           this.deckName = "";
           this.deckList = "";
+          this.$store.dispatch("loadDeckLists");
         })
         .catch((error) => {
           if (String(error.response.status) == "422") {
