@@ -3,43 +3,53 @@ from card import Card
 
 from deck import Deck
 from deck import Jan2022_Format
-def parseTCGODecklist(filename):
-    deck= Deck(name=filename)
+
+def parseTCGODeckListFromFile(filename):
     with open( f"Import/{filename}", "r", encoding="utf-8") as tcgolist:
-        while line :=tcgolist.readline():
-            if line[:9] == "##Pokémon":
-                tcgolist.readline()
-                while line !="\n":
-                    line=tcgolist.readline()
-                    if line !="\n":
-                        amount,first = getAmountCard(line)
-                        set,last = getSet(line)
-                        collnum = getCollNum(line)[0]
-                        card = Card(amount = amount, name = line[first:last], type = "Pokemon", set = set, coll_num = collnum)
-                        deck.add_card(card)
-            if line[:9] == "##Trainer":
-                tcgolist.readline()
-                while line !="\n":
-                    line=tcgolist.readline()
-                    if line !="\n":
-                        amount,first = getAmountCard(line)
-                        set,last = getSet(line)
-                        collnum = getCollNum(line)[0]
-                        card = Card(amount = amount, name = line[first:last], type = "Trainer", set = set, coll_num = collnum)
-                        deck.add_card(card)
-            if line[:8] == "##Energy":
-                tcgolist.readline()
-                while line !="\n":
-                    line=tcgolist.readline()
-                    if line !="\n":
-                        amount,first = getAmountCard(line)
-                        set,last = getSet(line)
-                        if last is None:
-                            collnum,last = getCollNum(line)
-                        else:
-                            collnum = getCollNum(line)[0]
-                        card = Card(amount = amount, name = line[first:last], type = "Energy", set = set, coll_num = collnum)
-                        deck.add_card(card)
+        contents = tcgolist.read()
+        print (contents)
+        #return parseTCGODecklist(filename.strip(".txt"), contents)
+
+
+def parseTCGODecklist(deckName, deckList, format=""):
+    deck= Deck(name=deckName)
+
+    #TODO : implement formatting guessing to handle decklists from other sources like LimitlessTCG, etc.
+
+    section = ''
+
+    for line in deckList.split('\n'):
+        line = line.strip('\r').rstrip()
+        #print ("Line "+line)
+
+        if line.startswith("****** Pokémon Trading Card Game Deck List ******"):
+            continue
+        
+        if line.startswith("##Pokémon") or line.startswith("Pokémon") or line.startswith("Pokemon"):
+            section="Pokemon"
+            continue
+        if line.startswith("##Trainer") or line.startswith("Trainer"):
+            section="Trainer"
+            continue
+        if line.startswith("##Energy") or line.startswith("Energy"):
+            section="Energy"
+            continue
+
+        if line == "":
+            continue
+
+        if line.startswith("Total Cards"):
+            break
+
+        amount,first = getAmountCard(line)
+        set,last = getSet(line)
+        if last is None:
+            collnum,last = getCollNum(line)
+        else:
+            collnum = getCollNum(line)[0]
+        card = Card(amount = amount, name = line[first:last], type = section, set = set, coll_num = collnum)
+        deck.add_card(card)
+        
     #retest the format as new cards have been added
     deck.format =deck.setFormat(Jan2022_Format)
     return deck    
