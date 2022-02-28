@@ -4,9 +4,9 @@ from sre_constants import SUCCESS
 from urllib import request, response
 from flask import Flask, jsonify, send_from_directory, request, Response, json
 from flask_cors import CORS
-from os import path, listdir
+from os import path, listdir, walk
 import parseDecklist
-from deck import DeckUnvalidCardError
+from deck import DeckUnvalidCardError, DeckIncompleteError
 
 
 # configuration
@@ -41,12 +41,16 @@ def addDeckList():
         deckName = datetime.now().strftime("%Y%m%d_%H%M%S")
         try:
             deck = parseDecklist.parseTCGODecklist(request.json["deckName"],request.json["deckList"],request.json["format"])
+            if (not deck.isComplete()):
+                raise DeckIncompleteError("Deck does not contain 60 cards")
             path = deck.exportToTCGO()
             response = Response(f"{{\"location\": \"{path}\"}}", status=201, mimetype='application/json')
             resp = jsonify(success=True)
         except DeckUnvalidCardError :
             response = Response("{\"error\": \"deck is invalid\"}", status=422, mimetype='application/json')          
-        
+        except DeckIncompleteError :
+            response = Response("{\"error\": \"deck is incomplete\"}", status=422, mimetype='application/json')
+
     else:
         response = Response("{\"error\": \"request is invalid, body syntax is {{deckList:'',deckName:'',format:''}}\"}", status=400, mimetype='application/json')
     return response
@@ -57,11 +61,14 @@ def getDeckLists():
     if not path.isdir("Export"):
         print("Please Create the Export folder")
     else:
-        for file in listdir("Export/Expanded"):
-            with open( f"Export/Expanded/{file}", "r", encoding="utf-8") as tcgolist:
-                contents = tcgolist.read()
-                print(contents)
-                deckLists.update({file.replace(".txt","") : contents})
+        for root, dirs, files in walk("Export"):
+            for dir in dirs:
+                deckListsInFormat = {}
+                for file in listdir(f"Export/{dir}"):                
+                    with open( f"Export/{dir}/{file}", "r", encoding="utf-8") as tcgolist:
+                        contents = tcgolist.read()
+                        deckListsInFormat.update({file.replace(".txt","") : contents})
+                deckLists.update({f"{dir}" : deckListsInFormat})
     response = Response(f"{{\"deckLists\": {json.dumps(deckLists)}}}", status=200, mimetype="application/json")
     return response
 

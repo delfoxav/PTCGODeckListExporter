@@ -1,5 +1,6 @@
 <template>
   <div class="import">
+    <h2>Import deck</h2>
     <form @submit.prevent="submitForm">
       <div class="form-group m-3">
         <label>Deck Name</label>
@@ -15,15 +16,15 @@
       <div class="form-group m-3">
         <label>Decklist</label>
         <textarea
-          rows="30"
-          cols="45"
+          rows="22"
+          cols="25"
           type="text"
           class="form-control"
           v-model="deckList"
         />
       </div>
       <div class="form-group m-3">
-        <button type="submit" class="btn btn-primary">Import a deck</button>
+        <button type="submit" class="btn btn-primary w-100">Import</button>
       </div>
     </form>
   </div>
@@ -60,6 +61,7 @@ export default {
           }
           this.deckName = "";
           this.deckList = "";
+          this.$store.dispatch("loadDeckLists");
         })
         .catch((error) => {
           if (String(error.response.status) == "422") {
@@ -74,5 +76,9 @@ export default {
 textarea {
   resize: none;
   overflow: scroll;
+  overflow-x: hidden; 
+}
+.w-100{
+  width: 100%;
 }
 </style>
