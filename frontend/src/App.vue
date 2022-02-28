@@ -1,12 +1,10 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link>
-  </div>
   <router-view/>
 </template>
 
 <style lang="scss">
 
+html,body { height:100%; }
 
 #nav {
   padding: 30px;

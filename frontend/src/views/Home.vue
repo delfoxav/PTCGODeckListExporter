@@ -1,8 +1,8 @@
 <template>
   <div class="home container">
     <div class="row">
-    <ImportDeck class="col-xl"/>
-    <Decklists class="col-xl"/>
+    <ImportDeck class="col-md"/>
+    <Decklists class="col-md"/>
   </div>
   </div>
 </template>
@@ -20,3 +20,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .home {
+    padding-top: 2rem;
+  }
+</style>
