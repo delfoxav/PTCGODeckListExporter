@@ -65,7 +65,7 @@ def getDeckLists():
             for dir in dirs:
                 deckListsInFormat = {}
                 for file in listdir(f"Export/{dir}"):                
-                    with open( f"Export/{dir}/{file}", "r", encoding="utf-8") as tcgolist:
+                    with open( f"Export/{dir}/{file}", "r") as tcgolist:
                         contents = tcgolist.read()
                         deckListsInFormat.update({file.replace(".txt","") : contents})
                 deckLists.update({f"{dir}" : deckListsInFormat})
